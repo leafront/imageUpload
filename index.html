@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name=viewport content="width=device-width,initial-scale=1, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+
+  </head>
+  <body>
+    <div id="app">
+      <input type="file" accept="image/*" capture="camera" id="uploadFile">
+      <img src="" id="image"/>
+    </div>
+    <script type="text/javascript" src="imageUpload.js"></script>
+    <script type="text/javascript">
+    
+      document.getElementById('uploadFile').addEventListener('change',function(e){
+
+        var file = e.currentTarget.files[0];
+
+        var self = this;
+
+        var imageUpload = new ImageUpload(file, {
+          url: '/upload/image',
+          data: {
+
+            page:1,
+            sex:'body'
+          },
+          onUpload: function (result) {
+
+            document.getElementById('image').src = result.url;
+
+            self.value = '';
+          },
+          onError: function () {
+
+          }
+        })
+        imageUpload.start();
+
+      })
+
+    </script>
+  </body>
+</html>
