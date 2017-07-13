@@ -336,7 +336,7 @@
         base64 = canvas.toDataURL('image/jpeg', this.options.quality);
         this.formBlob = this.getSource(base64);
       }
-
+      
       // 修复android
       if (isAndroid) {
           var encoder = new JPEGEncoder();

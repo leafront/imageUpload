@@ -9,9 +9,9 @@
   <body>
     <div id="app">
       <input type="file" id="uploadFile">
-
       <img src="" id="image"/>
     </div>
+    <script type="text/javascript" src="exif.js"></script>
     <script type="text/javascript" src="imageUpload.js"></script>
     <script type="text/javascript">
 
@@ -20,6 +20,7 @@
         var file = e.currentTarget.files[0];
 
         var self = this;
+
 
         var imageUpload = new ImageUpload(file, {
           url: '/upload/image',
@@ -33,7 +34,6 @@
             document.getElementById('image').src = result.url;
 
             self.value = '';
-
           },
           onError: function () {
 
