@@ -1,4 +1,4 @@
-(function(window,document,undefined) {
+;(function(window,document,undefined) {
 
   window.URL = window.URL || window.webkitURL;
   /*
@@ -298,9 +298,9 @@
     // 创建图片对象
     start: function() {
       this.img = document.createElement('img');
-      this.img.onload = () => {
-        this.imgLoaded()
-      }
+
+      this.img.onload = this.imgLoaded.bind(this)
+
       this.img.src = URL.createObjectURL(this.file);
       console.log('文件大小:' + this.file.size/ 1024 + 'kb');
     },
@@ -336,7 +336,7 @@
         base64 = canvas.toDataURL('image/jpeg', this.options.quality);
         this.formBlob = this.getSource(base64);
       }
-      
+
       // 修复android
       if (isAndroid) {
           var encoder = new JPEGEncoder();
