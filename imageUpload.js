@@ -347,7 +347,7 @@
     },
     getSource:function(base64) {
       var blob = api.dataURL2Blob(base64);
-      console.log(blob.size,this.file.size)
+
       if (blob.size < this.file.size) {
         console.log('压缩大小' + blob.size / 1024 + 'kb');
         return blob;
@@ -358,11 +358,12 @@
       }
     },
     upload: function() {
+
       var xhr = new XMLHttpRequest();
+
       var fd = new FormData();
 
       var options = this.options;
-      var self = this;
 
       xhr.open("POST", options.url, true);
 
@@ -378,10 +379,11 @@
       };
 
       options.data[this.options.fileKey] = this.formBlob;
-      console.log(options.data)
+
       for (var i in options.data) {
         fd.append(i, options.data[i]);
       }
+
       xhr.send(fd);
 
       return xhr;
