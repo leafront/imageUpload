@@ -226,43 +226,40 @@
     return c.width = b.width, c.height = b.height, d = c.getContext("2d"), d.drawImage(b, 0, 0), d.getImageData(0, 0, c.width, c.height)
   }
 
+  function dataURL2Blob( dataURI ) {
+    var byteStr, intArray, ab, i, mimetype, parts;
 
-  var api = {
-    dataURL2Blob: function( dataURI ) {
-      var byteStr, intArray, ab, i, mimetype, parts;
+    parts = dataURI.split(',');
 
-      parts = dataURI.split(',');
-
-      if ( ~parts[ 0 ].indexOf('base64') ) {
-          byteStr = atob( parts[ 1 ] );
-      } else {
-          byteStr = decodeURIComponent( parts[ 1 ] );
-      }
-
-      ab = new ArrayBuffer( byteStr.length );
-      intArray = new Uint8Array( ab );
-
-      for ( i = 0; i < byteStr.length; i++ ) {
-          intArray[ i ] = byteStr.charCodeAt( i );
-      }
-
-      mimetype = parts[ 0 ].split(':')[ 1 ].split(';')[ 0 ];
-
-      return this.arrayBufferToBlob( ab, mimetype );
-    },
-    arrayBufferToBlob: function( buffer, type ) {
-        var builder = window.BlobBuilder || window.WebKitBlobBuilder,
-            bb;
-
-        // android不支持直接new Blob, 只能借助blobbuilder.
-        if ( builder ) {
-            bb = new builder();
-            bb.append( buffer );
-            return bb.getBlob( type );
-        }
-
-        return new Blob([ buffer ], type ? { type: type } : {} );
+    if ( ~parts[ 0 ].indexOf('base64') ) {
+        byteStr = atob( parts[ 1 ] );
+    } else {
+        byteStr = decodeURIComponent( parts[ 1 ] );
     }
+
+    ab = new ArrayBuffer( byteStr.length );
+    intArray = new Uint8Array( ab );
+
+    for ( i = 0; i < byteStr.length; i++ ) {
+        intArray[ i ] = byteStr.charCodeAt( i );
+    }
+
+    mimetype = parts[ 0 ].split(':')[ 1 ].split(';')[ 0 ];
+
+    return this.arrayBufferToBlob( ab, mimetype );
+  }
+  function arrayBufferToBlob ( buffer, type ) {
+      var builder = window.BlobBuilder || window.WebKitBlobBuilder,
+          bb;
+
+      // android不支持直接new Blob, 只能借助blobbuilder.
+      if ( builder ) {
+          bb = new builder();
+          bb.append( buffer );
+          return bb.getBlob( type );
+      }
+
+      return new Blob([ buffer ], type ? { type: type } : {} );
   }
 
   var blobConstruct = !!(function () { // Test for constructing of blobs using new Blob()
@@ -401,7 +398,7 @@
       this.upload();
     },
     getSource:function(base64) {
-      var blob = api.dataURL2Blob(base64);
+      var blob = dataURL2Blob(base64);
 
       if (blob.size < this.file.size) {
         console.log('压缩大小' + blob.size / 1024 + 'kb');
@@ -446,5 +443,5 @@
   }
 
   window.ImageUpload = ImageUpload;
-  
+
 })(window,document,undefined)
