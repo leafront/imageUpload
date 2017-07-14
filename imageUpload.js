@@ -310,11 +310,24 @@
     // 压缩图片，然后上传
     imgLoaded: function() {
       this.compress();
-      this.upload();
     },
     compress: function() {
-      //生成比例
+
+      var This = this;
+
       var img = this.img;
+
+      EXIF.getData(this.file, function() {
+
+          var orientation = EXIF.getTag(this, "Orientation");
+          This.drawImage(img, orientation);
+
+      })
+
+    },
+    drawImage: function(img,orientation){
+      //生成比例
+
       var w = img.width,
       h = img.height,
       scale = w / h;
@@ -322,10 +335,44 @@
       h = w / scale;
       //生成canvas
       var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
       canvas.width = w;
       canvas.height = h;
-      var ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
+      switch (orientation) {
+        case 2:
+          ctx.translate(w, 0);
+          ctx.scale(-1,1);
+          break;
+        case 3:
+          ctx.translate(w,h);
+          ctx.rotate(Math.PI);
+          break;
+        case 4:
+          ctx.translate(0,h);
+          ctx.scale(1,-1);
+          break;
+        case 5:
+          ctx.rotate(0.5 * Math.PI);
+          ctx.scale(1,-1);
+          break;
+        case 6:
+          ctx.rotate(0.5 * Math.PI);
+
+          ctx.translate(0,-h);
+
+          break;
+        case 7:
+          ctx.rotate(0.5 * Math.PI);
+          ctx.translate(w,-h);
+          ctx.scale(-1,1);
+          break;
+        case 8:
+          ctx.rotate(-0.5 * Math.PI);
+          ctx.translate(-w,0);
+          break;
+      }
+
       var base64 = canvas.toDataURL('image/jpeg', this.options.quality);
 
       // 修复IOS
@@ -344,6 +391,7 @@
           this.formBlob = this.getSource(base64);
 
       }
+      this.upload();
     },
     getSource:function(base64) {
       var blob = api.dataURL2Blob(base64);
@@ -368,7 +416,7 @@
       xhr.open("POST", options.url, true);
 
       xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
           if (xhr.status == 200) {
             var res = JSON.parse(xhr.responseText);
             options.onUpload(res);
