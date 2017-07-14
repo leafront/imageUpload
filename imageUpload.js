@@ -246,7 +246,7 @@
 
     mimetype = parts[ 0 ].split(':')[ 1 ].split(';')[ 0 ];
 
-    return this.arrayBufferToBlob( ab, mimetype );
+    return arrayBufferToBlob( ab, mimetype );
   }
   function arrayBufferToBlob ( buffer, type ) {
       var builder = window.BlobBuilder || window.WebKitBlobBuilder,
