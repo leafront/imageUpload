@@ -444,5 +444,7 @@
       return xhr;
     }
   }
+
   window.ImageUpload = ImageUpload;
+  
 })(window,document,undefined)
