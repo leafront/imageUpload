@@ -405,7 +405,6 @@
         return blob;
       } else {
         console.log('使用原图');
-        this.uploadFile = true;
         return this.file;
       }
     },
