@@ -338,7 +338,14 @@
       var ctx = canvas.getContext('2d');
       canvas.width = w;
       canvas.height = h;
-      ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
+      var styleWidth  = canvas.style.width;
+      var styleHeight = canvas.style.height;
+      if (orientation > 4) {
+  			canvas.width  = h;
+  			canvas.style.width  = styleHeight;
+  			canvas.height = w;
+  			canvas.style.height = styleWidth;
+    	}
       switch (orientation) {
         case 2:
           ctx.translate(w, 0);
@@ -377,15 +384,15 @@
 
       // 修复IOS
       if (isIOS) {
+
         drawImageIOSFix(ctx, img, 0, 0, img.width, img.height, 0, 0, w, h);
-        //var mpImg = new MegaPixImage(img);
-        //mpImg.render(canvas, { maxWidth: w, maxHeight: h, quality: quality || 0.8});
         base64 = canvas.toDataURL('image/jpeg', this.options.quality);
         this.formBlob = this.getSource(base64);
       }
 
       // 修复android
       if (isAndroid) {
+          ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
           var encoder = new JPEGEncoder();
           base64 = encoder.encode(ctx.getImageData(0, 0, w, h), this.options.quality * 100);
           this.formBlob = this.getSource(base64);
