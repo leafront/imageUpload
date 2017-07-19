@@ -15,8 +15,8 @@
   var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
   function drawImageIOSFix(ctx, img) {
-    var vertSquashRatio = detectVerticalSquash(img)
-    var arg_count = arguments.length
+    var vertSquashRatio = detectVerticalSquash(img);
+    var arg_count = arguments.length;
     switch (arg_count) {
       case 4  :
         ctx.drawImage(img, arguments[2], arguments[3] / vertSquashRatio);
@@ -36,55 +36,27 @@
     // Fixes a bug which squash image vertically while drawing into canvas for some images.
     // This is a bug in iOS6 (and IOS7) devices. This function from https://github.com/stomita/ios-imagefile-megapixel
     function detectVerticalSquash(img) {
-      var iw = img.naturalWidth, ih = img.naturalHeight
-      var canvas = document.createElement("canvas")
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      var canvas = document.createElement("canvas");
       canvas.width = 1
       canvas.height = ih
       var ctx = canvas.getContext('2d')
       ctx.drawImage(img, 0, 0)
       var data = ctx.getImageData(0, 0, 1, ih).data
       // search image edge pixel position in case it is squashed vertically.
-      var sy = 0, ey = ih, py = ih
+      var sy = 0, ey = ih, py = ih;
       while (py > sy) {
-        var alpha = data[(py - 1) * 4 + 3]
+        var alpha = data[(py - 1) * 4 + 3];
         if (alpha === 0) {
-          ey = py
+          ey = py;
         } else {
-          sy = py
+          sy = py;
         }
-        py = (ey + sy) >> 1
+        py = (ey + sy) >> 1;
       }
-      var ratio = (py / ih)
-      return (ratio === 0) ? 1 : ratio
+      var ratio = (py / ih);
+      return (ratio === 0) ? 1 : ratio;
     }
-  }
-
-
-
-  // Detects vertical squash in loaded image.
-  // Fixes a bug which squash image vertically while drawing into canvas for some images.
-  // This is a bug in iOS6 (and IOS7) devices. This function from https://github.com/stomita/ios-imagefile-megapixel
-  function detectVerticalSquash(img) {
-      var iw = img.naturalWidth, ih = img.naturalHeight
-      var canvas = document.createElement("canvas")
-      canvas.width = 1
-      canvas.height = ih
-      var ctx = canvas.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      var data = ctx.getImageData(0, 0, 1, ih).data
-      // search image edge pixel position in case it is squashed vertically.
-      var sy = 0, ey = ih, py = ih
-      while (py > sy) {
-          var alpha = data[(py - 1) * 4 + 3]
-          if (alpha === 0) {
-              ey = py
-          } else {
-              sy = py
-          }
-          py = (ey + sy) >> 1
-      }
-      var ratio = (py / ih)
-      return (ratio === 0) ? 1 : ratio
   }
 
 
