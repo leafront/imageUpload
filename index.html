@@ -24,12 +24,14 @@
 
         var self = this;
 
-
         var imageUpload = new ImageUpload(file, {
+        	
           url: '/upload/image',
+	        
           data: {
 
             page:1,
+	          list:[{file:file}],
             sex:'body'
           },
           onUpload: function (result) {
