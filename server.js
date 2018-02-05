@@ -12,10 +12,12 @@ var port=8090,
 
     app.listen(port);
 
-    app.post('/upload/image',upload.single('file'),function(req,res){
+    app.post('/api/upload/image',upload.single('files'),function(req,res){
       // 重命名文件
 
-			console.log(req.body);
+      console.log(req.body);
+      
+      console.log(req.file)
 
      let oldPath = path.join(__dirname, req.file.path);
      let newPath = path.join(__dirname, 'uploads/' + req.file.filename+'.jpg');
